@@ -1,0 +1,80 @@
+{
+  "map_name": "Isometric System Map - История Роба",
+  "legend": {
+    "building_types": {
+      "entry_point": "Зелёный куб — точка входа",
+      "prison": "Серый куб — тюрьма/хранилище",
+      "transformer": "Чёрный куб с фиолетовым — трансформация",
+      "battlefield": "Красный куб — поле битвы",
+      "final": "Золотой куб — финал"
+    },
+    "dependencies": {
+      "solid_line": "Прямая зависимость",
+      "dashed_line": "Циклическая зависимость",
+      "dotted_line": "Поток данных"
+    },
+    "characters": {
+      "rob": "Синий — главный процесс",
+      "bezlikiy": "Красный — антагонист/оркестратор",
+      "pirates": "Жёлтый — помощники",
+      "bosses": "Оранжевый — противники"
+    }
+  },
+  "grid": {
+    "x_axis": ["Арена", "Лес", "Корабль", "Белый Куб", "Чёрный Куб", "Лагуна", "Тюрьма Бога"],
+    "y_axis": ["Вход", "Структура", "Трансформация", "Бой", "Финал"],
+    "z_axis": ["Измерение 1", "Измерение 2", "Ад", "Бездна"]
+  },
+  "buildings": {
+    "arena": {
+      "type": "entry_point",
+      "position": [0, 0, 0],
+      "dependencies": ["forest", "white_cube"]
+    },
+    "forest": {
+      "type": "transition",
+      "position": [1, 0, 0],
+      "dependencies": ["ship"]
+    },
+    "ship": {
+      "type": "hub",
+      "position": [2, 0, 0],
+      "dependencies": ["white_cube"]
+    },
+    "white_cube": {
+      "type": "prison",
+      "position": [3, 0, 0],
+      "dependencies": ["black_cube"]
+    },
+    "black_cube": {
+      "type": "transformer",
+      "position": [4, 1, 0],
+      "dependencies": ["prime_lagoon"]
+    },
+    "prime_lagoon": {
+      "type": "battlefield",
+      "position": [5, 2, 0],
+      "dependencies": ["god_prison"]
+    },
+    "god_prison": {
+      "type": "final",
+      "position": [6, 3, 0],
+      "dependencies": ["epilogue"]
+    }
+  },
+  "dependencies": [
+    {"from": "arena", "to": "forest", "type": "solid"},
+    {"from": "arena", "to": "white_cube", "type": "dashed"},
+    {"from": "forest", "to": "ship", "type": "solid"},
+    {"from": "ship", "to": "white_cube", "type": "dotted"},
+    {"from": "white_cube", "to": "black_cube", "type": "solid"},
+    {"from": "black_cube", "to": "prime_lagoon", "type": "solid"},
+    {"from": "prime_lagoon", "to": "god_prison", "type": "solid"},
+    {"from": "god_prison", "to": "epilogue", "type": "dashed"}
+  ],
+  "data_paths": [
+    {"name": "Память", "path": "arena -> white_cube -> black_cube", "payload": "memories"},
+    {"name": "Тьма", "path": "black_cube -> prime_lagoon -> god_prison", "payload": "shadow_power"},
+    {"name": "Управление", "path": "bezlikiy -> все локации", "payload": "control_signals"}
+  ]
+}
